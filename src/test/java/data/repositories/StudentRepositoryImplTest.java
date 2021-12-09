@@ -17,7 +17,7 @@ class StudentRepositoryImplTest {
     private Student studentOne;
     private Student studentTwo;
     @BeforeEach
-    void setUp() {
+    void setUp() throws HostelManagementException {
         studentOne = Student.builder().firstName("Ehis")
                 .lastName("Edemakhiota")
                 .matricNo("PSC1004396")
@@ -32,6 +32,8 @@ class StudentRepositoryImplTest {
         studentStudentRepository.save(studentOne);
         studentStudentRepository.save(studentTwo);
     }
+
+
 
     @Test
     void findByMatricNumber() throws Exception {

@@ -6,6 +6,7 @@ import data.repositories.HostelRepository;
 import data.repositories.StudentRepository;
 import dto.RegistrationRequest;
 import dto.StudentDto;
+import exceptions.NullEntityException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -76,6 +78,12 @@ public class StudentServicePartialMockingTests {
         studentService.assignBedSpace(secondStudent);
         studentService.assignBedSpace(thirdStudent);
         studentService.assignBedSpace(fourthStudent);
+    }
+    @Test
+    void testThrowsNullEntityExceptionWhenTryingToSaveANull(){
+        assertThatThrownBy(()->studentRepository.save(null))
+                .isInstanceOf(NullEntityException.class)
+                .hasMessage("student object cannot be null");
     }
     @Test
     void testReturnAllTheStudentsInAHostel() throws Exception {

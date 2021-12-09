@@ -3,6 +3,8 @@ package dto;
 import data.models.Gender;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -12,6 +14,7 @@ public class StudentDto{
     private String firstName;
     private String lastName;
     private String matricNo;
+    private LocalDateTime registrationTime;
     private Gender gender;
     private String bedSpace;
 

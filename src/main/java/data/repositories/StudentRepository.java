@@ -2,6 +2,7 @@ package data.repositories;
 
 import data.models.Student;
 import exceptions.HostelManagementException;
+import exceptions.NullEntityException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,7 +31,10 @@ public class StudentRepository{
                 .collect(Collectors.toList());
     }
 
-    public Student save(Student student) {
+    public Student save(Student student) throws HostelManagementException {
+        if (student == null){
+            throw new NullEntityException("student object cannot be null");
+        }
         database.put(student.getId(), student);
         return student;
     }

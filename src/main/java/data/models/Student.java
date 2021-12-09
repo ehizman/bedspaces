@@ -2,6 +2,8 @@ package data.models;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -13,14 +15,17 @@ public class Student{
     private String lastName;
     private String password;
     private Gender gender;
+    private LocalDateTime registrationTime;
     private String bedSpaceId;
     private String matricNo;
 
-    public Student(String firstName, String lastName, String password, String matricNo, Gender gender) {
+    public Student(String firstName, String lastName, String password,
+                   String matricNo, Gender gender, LocalDateTime registrationTime) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.matricNo = matricNo;
+        this.registrationTime = registrationTime;
         this.gender = gender;
     }
 

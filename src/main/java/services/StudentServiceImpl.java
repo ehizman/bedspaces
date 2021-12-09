@@ -6,6 +6,7 @@ import data.repositories.HostelRepository;
 import data.repositories.StudentRepository;
 import dto.RegistrationRequest;
 import dto.StudentDto;
+import exceptions.DuplicateIdException;
 import exceptions.HostelManagementException;
 
 import java.util.ArrayList;
@@ -24,12 +25,13 @@ public class StudentServiceImpl implements StudentService{
     public StudentDto registerStudent(RegistrationRequest registrationRequest) throws Exception {
         Optional<Student> optionalStudent = studentRepository.findById(registrationRequest.matricNo());
         if (optionalStudent.isPresent()){
-            throw new HostelManagementException("Matric number is not unique");
+            throw new DuplicateIdException("student record with matric number already exists");
         }
         Student student = ModelMapperConfig.getMapper().map(registrationRequest, Student.class);
         student = studentRepository.save(student);
         return ModelMapperConfig.getMapper().map(student, StudentDto.class);
     }
+
 
     @Override
     public void assignBedSpace(StudentDto studentDto) throws Exception {
