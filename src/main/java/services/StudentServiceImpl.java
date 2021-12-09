@@ -3,8 +3,8 @@ package services;
 import config.ModelMapperConfig;
 import data.models.*;
 import data.repositories.HostelRepository;
-import data.repositories.Repository;
-import dto.Register;
+import data.repositories.StudentRepository;
+import dto.RegistrationRequest;
 import dto.StudentDto;
 import exceptions.HostelManagementException;
 
@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class StudentServiceImpl implements StudentService{
-    private Repository<Student> studentRepository;
+    private StudentRepository studentRepository;
     private HostelRepository hostelRepository;
 
-    public StudentServiceImpl(Repository<Student> studentRepository, HostelRepository hostelRepository){
+    public StudentServiceImpl(StudentRepository studentRepository, HostelRepository hostelRepository){
         this.studentRepository = studentRepository;
         this.hostelRepository = hostelRepository;
     }
     @Override
-    public StudentDto registerStudent(Register studentDto) throws Exception {
-        Optional<Student> optionalStudent = studentRepository.findById(studentDto.matricNo());
+    public StudentDto registerStudent(RegistrationRequest registrationRequest) throws Exception {
+        Optional<Student> optionalStudent = studentRepository.findById(registrationRequest.matricNo());
         if (optionalStudent.isPresent()){
             throw new HostelManagementException("Matric number is not unique");
         }
-        Student student = ModelMapperConfig.getMapper().map(studentDto, Student.class);
+        Student student = ModelMapperConfig.getMapper().map(registrationRequest, Student.class);
         student = studentRepository.save(student);
         return ModelMapperConfig.getMapper().map(student, StudentDto.class);
     }

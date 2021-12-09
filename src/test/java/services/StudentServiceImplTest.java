@@ -2,10 +2,9 @@ package services;
 
 import data.models.*;
 import data.repositories.HostelRepository;
-import data.repositories.Repository;
-import dto.Register;
+import data.repositories.StudentRepository;
+import dto.RegistrationRequest;
 import dto.StudentDto;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import static org.mockito.ArgumentMatchers.any;
 import org.junit.jupiter.api.Test;
@@ -26,16 +25,16 @@ import static org.mockito.Mockito.when;
 class StudentServiceImplTest {
     private StudentService studentService;
     @Mock
-    private Repository<Student> studentRepository;
+    private StudentRepository studentRepository;
     @Mock
     private HostelRepository hostelRepository;
-    private Register registrationRequest;
+    private RegistrationRequest registrationRequest;
     private Student student;
 
     @BeforeEach
     void setUp() {
         studentService = new StudentServiceImpl(studentRepository, hostelRepository);
-        registrationRequest = new Register(
+        registrationRequest = new RegistrationRequest(
                 "Titobi",
                 "Ligali",
                 "securedPassword",
@@ -46,17 +45,24 @@ class StudentServiceImplTest {
                 .firstName("Titobi")
                 .lastName("Ligali")
                 .matricNo("MAT419")
+                .password("securedPassword")
                 .gender(Gender.MALE).build();
     }
 
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void registerStudentTest() throws Exception {
         when(studentRepository.save(any(Student.class))).thenReturn(student);
+//        when(studentRepository.save(any(Student.class))).thenAnswer(student -> Student.builder()
+//                .firstName("Titobi")
+//                .lastName("Ligali")
+//                .matricNo("MAT419")
+//                .password("securedPassword")
+//                .gender(Gender.MALE).build());
+//        when(studentRepository.save(null)).thenThrow(NullPointerException.class);
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        assertThat(studentDto, hasProperty("firstName", equalTo("Titobi")));
+        assertThat(studentDto, hasProperty("lastName", equalTo("Ligali")));
         assertThat(studentDto, hasProperty("matricNo", equalTo("MAT419")));
         assertThat(studentDto, hasProperty("gender", equalTo(Gender.MALE)));
 

@@ -6,7 +6,7 @@ import exceptions.HostelManagementException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class StudentRepositoryImpl implements Repository<Student> {
+public class StudentRepository{
     private Map<String, Student> database = new HashMap<>();
 
     private void validate(String id) throws HostelManagementException {
@@ -15,7 +15,6 @@ public class StudentRepositoryImpl implements Repository<Student> {
         }
     }
 
-    @Override
     public Optional<Student> findById(String id) throws Exception {
         validate(id);
         Student student = database.getOrDefault(id, null);
@@ -25,30 +24,25 @@ public class StudentRepositoryImpl implements Repository<Student> {
         return Optional.of(student);
     }
 
-    @Override
     public List<Student> findByName(String name) {
         return database.values().stream()
                 .filter(student -> (student.getFirstName()+" "+student.getLastName()).contains(name))
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Student save(Student student) {
         database.put(student.getId(), student);
         return student;
     }
 
-    @Override
     public void delete(String id) {
         database.remove(id);
     }
 
-    @Override
     public void delete(Student student) {
         database.remove(student.getId(), student);
     }
 
-    @Override
     public List<Student> findAll() {
         return new ArrayList<>(database.values());
     }

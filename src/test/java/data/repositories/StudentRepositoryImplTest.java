@@ -11,10 +11,9 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StudentRepositoryImplTest {
-    private StudentRepositoryImpl studentStudentRepository = new StudentRepositoryImpl();
+    private StudentRepository studentStudentRepository = new StudentRepository();
     private Student studentOne;
     private Student studentTwo;
     @BeforeEach

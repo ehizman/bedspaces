@@ -1,14 +1,14 @@
 package dto;
 
 import data.models.Gender;
-import data.models.Storable;
 import lombok.*;
 
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-public class StudentDto implements Storable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class StudentDto{
     private String firstName;
     private String lastName;
     private String matricNo;
@@ -22,7 +22,6 @@ public class StudentDto implements Storable {
         this.gender = gender;
     }
 
-    @Override
     public String getId() {
         return matricNo;
     }

@@ -7,7 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-public class Student implements Storable {
+public class Student{
+    private String id;
     private String firstName;
     private String lastName;
     private String password;
@@ -23,7 +24,6 @@ public class Student implements Storable {
         this.gender = gender;
     }
 
-    @Override
     public String getId() {
         return matricNo;
     }
