@@ -52,20 +52,24 @@ class StudentServiceImplTest {
 
     @Test
     void registerStudentTest() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        Student student = Student.builder()
+                                .firstName("John")
+                                .lastName("Doe")
+                                .matricNo("MAT100419")
+                                .password("securedPassword")
+                                .gender(Gender.MALE).build();
         when(studentRepository.save(any(Student.class))).thenReturn(student);
-//        when(studentRepository.save(any(Student.class))).thenAnswer(student -> Student.builder()
-//                .firstName("Titobi")
-//                .lastName("Ligali")
-//                .matricNo("MAT419")
-//                .password("securedPassword")
-//                .gender(Gender.MALE).build());
-//        when(studentRepository.save(null)).thenThrow(NullPointerException.class);
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
-        assertThat(studentDto, hasProperty("firstName", equalTo("Titobi")));
-        assertThat(studentDto, hasProperty("lastName", equalTo("Ligali")));
-        assertThat(studentDto, hasProperty("matricNo", equalTo("MAT419")));
+        assertThat(studentDto, hasProperty("firstName", equalTo("John")));
+        assertThat(studentDto, hasProperty("lastName", equalTo("Doe")));
+        assertThat(studentDto, hasProperty("matricNo", equalTo("MAT100419")));
         assertThat(studentDto, hasProperty("gender", equalTo(Gender.MALE)));
-
     }
 
     @Test
