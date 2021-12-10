@@ -19,10 +19,12 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.any;
 
 
 @ExtendWith(MockitoExtension.class)
-public class StudentServicePartialMockingTests {
+public class StudentServiceImpl_PartialMockingTests {
     private StudentService studentService;
     @Spy
     private StudentRepository studentRepository;
@@ -99,21 +101,21 @@ public class StudentServicePartialMockingTests {
 //        assertThat(namesOfStudentsIn_Hall3_Room1, hasItems("Emmanuel Okammy", "Titobi Ligali"));
 //    }
 //
-//    @Test
-//    void registerStudentTest() throws Exception {
-//        RegistrationRequest registrationRequest = new RegistrationRequest("Joshua", "Makinde",
-//                "my_password", "PSC1004396", Gender.MALE);
-//        Student student = Student.builder()
-//                .firstName("Joshua")
-//                .lastName("Makinde")
-//                .matricNo("PSC100419")
-//                .password("my_password")
-//                .gender(Gender.MALE).build();
-//        doReturn(student).when(studentRepository).save(any(Student.class));
-//        StudentDto studentDto = studentService.registerStudent(registrationRequest);
-//        assertThat(studentDto, hasProperty("firstName", equalTo("Joshua")));
-//        assertThat(studentDto, hasProperty("lastName", equalTo("Makinde")));
-//        assertThat(studentDto, hasProperty("matricNo", equalTo("PSC100419")));
-//        assertThat(studentDto, hasProperty("gender", equalTo(Gender.MALE)));
-//    }
+    @Test
+    void registerStudentTest() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest("John", "Fallow",
+                "my_password", "PSC1004396", Gender.MALE);
+        Student student = Student.builder()
+                .firstName("John")
+                .lastName("Fallow")
+                .matricNo("PSC100419")
+                .password("my_password")
+                .gender(Gender.MALE).build();
+        doReturn(student).when(studentRepository).save(any(Student.class));
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        assertThat(studentDto, hasProperty("firstName", equalTo("John")));
+        assertThat(studentDto, hasProperty("lastName", equalTo("Fallow")));
+        assertThat(studentDto, hasProperty("matricNo", equalTo("PSC100419")));
+        assertThat(studentDto, hasProperty("gender", equalTo(Gender.MALE)));
+    }
 }
