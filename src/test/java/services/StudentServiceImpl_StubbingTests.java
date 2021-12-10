@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -115,8 +117,63 @@ class StudentServiceImpl_StubbingTests {
                 .hasMessage("student record with matric number already exists");
     }
 
+//    @Test
+//    void testReturnNamesOfAllStudentsInAHostel() throws Exception {
+//        List<StudentDto> registeredStudents = registerStudents();
+//        for (StudentDto dto: registeredStudents) {
+//            studentService.assignBedSpace(dto);
+//        }
+//        when(studentRepository.findAll()).thenCallRealMethod();
+//        when(hostelRepository.findHostelByName(anyString())).thenCallRealMethod();
+//        List<String> studentsInHall3 = studentService.returnNamesOfAllStudentsInAHostel("HALL3");
+//        List<String> studentsInHall1 = studentService.returnNamesOfAllStudentsInAHostel("HALL1");
+//
+//        assertThat(studentsInHall3, hasSize(2));
+//        assertThat(studentsInHall3, hasItems("John Doe", "Peter Rabbit"));
+//        assertThat(studentsInHall1, hasSize(2));
+//        assertThat(studentsInHall1, hasItems("Mary Fallow", "Patricia Lemon"));
+//
+//    }
+//
+//
+//    private List<StudentDto> registerStudents() throws Exception {
+//        RegistrationRequest firstRegistrationRequest = new RegistrationRequest(
+//                "John",
+//                "Doe",
+//                "securedPassword",
+//                "MAT100419",
+//                Gender.MALE);
+//        RegistrationRequest secondRegistrationRequest = new RegistrationRequest(
+//                "Mary",
+//                "Fallow",
+//                "securedWassword",
+//                "MAT100420",
+//                Gender.FEMALE);
+//        RegistrationRequest thirdRegistrationRequest = new RegistrationRequest(
+//                "Peter",
+//                "Rabbit",
+//                "securedDassword",
+//                "MAT100421",
+//                Gender.MALE);
+//        RegistrationRequest fourthRegistrationRequest = new RegistrationRequest(
+//                "Patricia",
+//                "Lemon",
+//                "securedBassword",
+//                "MAT100422",
+//                Gender.FEMALE);
+//        when(studentRepository.findById(anyString())).thenCallRealMethod();
+//        when(studentRepository.save(any(Student.class))).thenCallRealMethod();
+//        StudentDto firstStudentDto = studentService.registerStudent(firstRegistrationRequest);
+//        StudentDto secondStudentDto = studentService.registerStudent(secondRegistrationRequest);
+//        StudentDto thirdStudentDto = studentService.registerStudent(thirdRegistrationRequest);
+//        StudentDto fourthStudentDto = studentService.registerStudent(fourthRegistrationRequest);
+//
+//        return new ArrayList<>(List.of(firstStudentDto, secondStudentDto,
+//                thirdStudentDto, fourthStudentDto));
+//    }
+
     @Test
-    void assignBedSpaceToStudent() throws Exception {
+    void testAssignBedSpaceToStudent() throws Exception {
         RegistrationRequest registrationRequest = new RegistrationRequest(
                 "John",
                 "Doe",
