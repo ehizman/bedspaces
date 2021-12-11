@@ -9,13 +9,13 @@ import dto.StudentDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,4 +52,39 @@ public class StudentServiceImpl_VerifyTests {
         verify(hostelRepository, times(0)).returnAvailableFemaleSpace();
         verify(hostelRepository, times(1)).returnAvailableMaleSpace();
     }
+
+    @Test
+    void test_returnNamesOfStudentInARoom() throws Exception {
+        RegistrationRequest firstRegistrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+
+        RegistrationRequest secondRegistrationRequest = new RegistrationRequest(
+                "Mary",
+                "Fallow",
+                "securedPassword",
+                "PSC100419",
+                Gender.FEMALE);
+
+        StudentDto firstStudentDto = studentService.registerStudent(firstRegistrationRequest);
+        StudentDto secondStudentDto = studentService.registerStudent(secondRegistrationRequest);
+        studentService.assignBedSpace(firstStudentDto);
+        studentService.assignBedSpace(secondStudentDto);
+        reset(studentRepository);//This reset is put here to re- initialize before interaction with returnTheNamesOfAllStudentsInARoom()
+        List<String> studentNames = studentService.returnTheNamesOfAllStudentsInARoom("HALL3 Room 1");
+        verify(studentRepository,never()).findById(anyString());
+        verify(studentRepository, times(1)).findAll();
+        assertThat(studentNames).contains("John Doe");
+        studentNames = null;
+        reset(studentRepository);
+        studentNames = studentService.returnTheNamesOfAllStudentsInARoom("HALL1 Room 1");
+        verify(studentRepository,never()).findById(anyString());
+        verify(studentRepository, times(1)).findAll();
+        assertThat(studentNames).contains("Mary Fallow");
+    }
+
+
 }

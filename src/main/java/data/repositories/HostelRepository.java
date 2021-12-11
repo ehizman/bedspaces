@@ -5,7 +5,9 @@ import data.models.Gender;
 import data.models.Hostel;
 import data.models.HostelName;
 import exceptions.HostelManagementException;
+import exceptions.NoAvailableBedspaceException;
 
+import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -52,12 +54,24 @@ public class HostelRepository {
         return availableBedSpacesForFemales.size()+availableBedSpacesForMales.size();
     }
 
-    public BedSpace returnAvailableFemaleSpace() {
-        return availableBedSpacesForFemales.poll();
+    public BedSpace returnAvailableFemaleSpace() throws NoAvailableBedspaceException {
+        try {
+            return availableBedSpacesForFemales.poll();
+
+        }
+        catch(NoSuchElementException exception){
+            throw new NoAvailableBedspaceException(exception.getMessage());
+        }
     }
 
-    public BedSpace returnAvailableMaleSpace() {
-        return availableBedSpacesForMales.poll();
+    public BedSpace returnAvailableMaleSpace() throws NoAvailableBedspaceException {
+        try {
+            return availableBedSpacesForMales.poll();
+
+        }
+        catch(NoSuchElementException exception){
+            throw new NoAvailableBedspaceException(exception.getMessage());
+        }
     }
 
     public Hostel[] getAllHostels(){

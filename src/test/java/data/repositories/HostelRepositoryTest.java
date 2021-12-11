@@ -3,6 +3,7 @@ package data.repositories;
 import data.models.BedSpace;
 import data.models.Gender;
 import data.models.Hostel;
+import exceptions.NoAvailableBedspaceException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,14 +40,14 @@ class HostelRepositoryTest {
     }
 
     @Test
-    void returnAvailableMaleSpace(){
+    void returnAvailableMaleSpace() throws NoAvailableBedspaceException {
         assertThat(hostelRepository.returnAvailableMaleSpace(), notNullValue());
         assertThat(hostelRepository.getAvailableBedSpacesForMales().size(), is(159));
         assertThat(hostelRepository.getTotalNumberOfAvailableBedSpaces(), is(319));
     }
 
     @Test
-    void returnAvailableFemaleSpace(){
+    void returnAvailableFemaleSpace() throws NoAvailableBedspaceException {
         assertThat(hostelRepository.returnAvailableFemaleSpace(), notNullValue());
         assertThat(hostelRepository.getAvailableBedSpacesForFeMales().size(), is(159));
         assertThat(hostelRepository.getTotalNumberOfAvailableBedSpaces(), is(319));
