@@ -73,7 +73,7 @@ public class StudentServiceImpl_VerifyTests {
         StudentDto secondStudentDto = studentService.registerStudent(secondRegistrationRequest);
         studentService.assignBedSpace(firstStudentDto);
         studentService.assignBedSpace(secondStudentDto);
-        reset(studentRepository);//This reset is put here to re- initialize before interaction with returnTheNamesOfAllStudentsInARoom()
+        reset(studentRepository);//This reset is put here to re-initialize before interaction with returnTheNamesOfAllStudentsInARoom()
         List<String> studentNames = studentService.returnTheNamesOfAllStudentsInARoom("HALL3 Room 1");
         verify(studentRepository,never()).findById(anyString());
         verify(studentRepository, times(1)).findAll();
@@ -84,6 +84,18 @@ public class StudentServiceImpl_VerifyTests {
         verify(studentRepository,never()).findById(anyString());
         verify(studentRepository, times(1)).findAll();
         assertThat(studentNames).contains("Mary Fallow");
+    }
+
+    @Test
+    void testFindStudentById() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        studentService.registerStudent(registrationRequest);
+
     }
 
 
