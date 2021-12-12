@@ -116,9 +116,25 @@ public class StudentServiceImpl_VerifyTests {
                 Gender.MALE);
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
         studentService.assignBedSpace(studentDto);
-        reset(studentRepository);
+        reset(studentRepository, hostelRepository);
 
         studentService.returnTheNamesOfAllStudentsInARoom("HALL3 Room 1");
         verify(studentRepository, only()).findAll();
+    }
+
+    @Test
+    void testThatThereAreNoInteractionsWithHostelRepositoryWhenInvokingFindStudentById() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        reset(studentRepository, hostelRepository);
+
+        studentService.findStudentById("MAT100419");
+        verifyNoInteractions(hostelRepository);
     }
 }
