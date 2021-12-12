@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -94,9 +95,30 @@ public class StudentServiceImpl_VerifyTests {
                 "securedPassword",
                 "MAT100419",
                 Gender.MALE);
-        studentService.registerStudent(registrationRequest);
-
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        reset(studentRepository);
+        Student student = studentService.findStudentById("MAT100419");
+        verify(studentRepository, atLeastOnce()).findById(anyString());
+        assertThat(student.getName()).isEqualTo("John Doe");
+        assertThat(student.getPassword()).isEqualTo("securedPassword");
+        assertThat(student.getMatricNo()).isEqualTo("MAT100419");
+        assertThat(student.getGender()).isEqualTo(Gender.MALE);
     }
 
+    @Test
+    void testThatOnlyFindAllIsCalledOnStudentRepository_WhenWeTryToReturnNamesOfAllStudentsInARoom() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        reset(studentRepository);
 
+        studentService.returnTheNamesOfAllStudentsInARoom("HALL3 Room 1");
+        verify(studentRepository, only()).findAll();
+    }
 }
