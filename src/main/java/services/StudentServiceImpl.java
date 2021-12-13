@@ -8,6 +8,7 @@ import dto.RegistrationRequest;
 import dto.StudentDto;
 import exceptions.DuplicateIdException;
 import exceptions.HostelManagementException;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class StudentServiceImpl implements StudentService{
         this.hostelRepository = hostelRepository;
     }
     @Override
-    public StudentDto registerStudent(RegistrationRequest registrationRequest) throws Exception {
+    public StudentDto registerStudent(@NonNull RegistrationRequest registrationRequest) throws Exception {
         Optional<Student> optionalStudent = studentRepository.findById(registrationRequest.matricNo());
         if (optionalStudent.isPresent()){
             throw new DuplicateIdException("student record with matric number already exists");

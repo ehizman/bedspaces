@@ -9,6 +9,9 @@ import dto.StudentDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -16,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +31,9 @@ public class StudentServiceImpl_VerifyTests {
     private HostelRepository hostelRepository;
     private LocalDateTime time;
     private Student student;
+
+    @Captor
+    ArgumentCaptor<Student> studentArgumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -136,5 +141,86 @@ public class StudentServiceImpl_VerifyTests {
 
         studentService.findStudentById("MAT100419");
         verifyNoInteractions(hostelRepository);
+    }
+
+    @Test
+    void testThatThereAreNoMoreInteractionsWithMockObject() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        reset(studentRepository, hostelRepository);
+        verifyNoMoreInteractions(hostelRepository);
+    }
+
+    @Test
+    void testTheOrderOfInteractions() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        InOrder inorder = inOrder(studentRepository, hostelRepository);
+        inorder.verify(studentRepository).findById(anyString());
+        inorder.verify(hostelRepository).returnAvailableMaleSpace();
+    }
+
+    @Test
+    void testTheOrderOfInteractionWithVerificationModePassedAsAnArgument() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        studentService.assignBedSpace(studentDto);
+        InOrder inorder = inOrder(studentRepository, hostelRepository);
+        inorder.verify(studentRepository, times(1)).findById(anyString());
+        inorder.verify(hostelRepository, times(1)).returnAvailableMaleSpace();
+        inorder.verify(hostelRepository, never()).findHostelByName(anyString());
+    }
+
+    @Test
+    void capturingArgumentsUsingArgumentCaptor() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        //The following lines asserts that our ModelMapper works as expected
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        verify(studentRepository).save(studentArgumentCaptor.capture());
+        Student student = studentArgumentCaptor.getValue();
+        assertThat(studentDto.getFirstName()).isEqualTo(student.getFirstName());
+        assertThat(studentDto.getLastName()).isEqualTo(student.getLastName());
+        assertThat(studentDto.getMatricNo()).isEqualTo(student.getMatricNo());
+        assertThat(studentDto.getRegistrationTime()).isEqualTo(student.getRegistrationTime());
+    }
+
+    @Test
+    void capturingArgumentsUsingArgumentCaptor_DemonstratingGetAllValues() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest(
+                "John",
+                "Doe",
+                "securedPassword",
+                "MAT100419",
+                Gender.MALE);
+        //The following lines asserts that our ModelMapper works as expected
+        StudentDto studentDto = studentService.registerStudent(registrationRequest);
+        verify(studentRepository).save(studentArgumentCaptor.capture());
+        Student student = studentArgumentCaptor.getAllValues().get(0);
+        assertThat(studentDto.getFirstName()).isEqualTo(student.getFirstName());
+        assertThat(studentDto.getLastName()).isEqualTo(student.getLastName());
+        assertThat(studentDto.getMatricNo()).isEqualTo(student.getMatricNo());
+        assertThat(studentDto.getRegistrationTime()).isEqualTo(student.getRegistrationTime());
     }
 }
