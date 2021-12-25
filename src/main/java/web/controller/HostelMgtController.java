@@ -3,6 +3,8 @@ package web.controller;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import config.ModelMapperConfig;
+import data.models.Student;
 import data.repositories.HostelRepository;
 import data.repositories.StudentRepository;
 import dto.RegistrationRequest;
@@ -37,7 +39,19 @@ public class HostelMgtController {
                 StudentDto studentDto = studentService.registerStudent(registrationRequest);
                 return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(studentDto);
             }));
-
+            get("/get-student-info/:studentId", (request, response)->{
+                String studentId = request.params(":studentId");
+                try{
+                    Student student = studentService.findStudentById(studentId);
+                    StudentDto studentDto = ModelMapperConfig.getMapper().map(student, StudentDto.class);
+                    return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(studentDto);
+                }catch (HostelManagementException exception){
+                    log.info("Exception occurred --> {}", exception.getMessage());
+                    return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(exception.getMessage());
+                }
+            });
+        });
+        path("api/v1/bed-spaces", ()->{
             post("/assign-bed-space", ((request, response) -> {
                 response.type("application/json");
                 StudentDto studentDto = objectMapper.readValue(request.body(), StudentDto.class);
