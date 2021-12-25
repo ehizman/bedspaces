@@ -2,8 +2,6 @@ package data.models;
 
 import lombok.Data;
 
-import java.util.List;
-import java.util.ArrayList;
 
 @Data
 public class Room {

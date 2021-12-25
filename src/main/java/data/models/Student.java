@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
+@ToString
 public class Student{
     private String firstName;
     private String lastName;
@@ -35,4 +36,6 @@ public class Student{
     public String getName() {
         return firstName + " " + lastName;
     }
+
+
 }

@@ -26,7 +26,19 @@ public class StudentDto{
         this.gender = gender;
     }
 
-    public String getId() {
+    public String getMatricNo() {
         return matricNo;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", matricNo='" + matricNo + '\'' +
+                ", registrationTime=" + registrationTime +
+                ", gender=" + gender +
+                ", bedSpace='" + bedSpace + '\'' +
+                '}';
     }
 }
