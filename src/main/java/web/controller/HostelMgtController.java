@@ -13,6 +13,7 @@ import exceptions.HostelManagementException;
 import lombok.extern.slf4j.Slf4j;
 import services.StudentService;
 import services.StudentServiceImpl;
+import java.util.List;
 
 
 import static spark.Spark.*;
@@ -45,6 +46,16 @@ public class HostelMgtController {
                     Student student = studentService.findStudentById(studentId);
                     StudentDto studentDto = ModelMapperConfig.getMapper().map(student, StudentDto.class);
                     return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(studentDto);
+                }catch (HostelManagementException exception){
+                    log.info("Exception occurred --> {}", exception.getMessage());
+                    return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(exception.getMessage());
+                }
+            });
+            get("/get-names-of-students-in-hostel/:hostelName", (request, response) -> {
+                String hostelName = request.params(":hostelName");
+                try{
+                    List<String> names = studentService.returnNamesOfAllStudentsInAHostel(hostelName);
+                    return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(names);
                 }catch (HostelManagementException exception){
                     log.info("Exception occurred --> {}", exception.getMessage());
                     return objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(exception.getMessage());
