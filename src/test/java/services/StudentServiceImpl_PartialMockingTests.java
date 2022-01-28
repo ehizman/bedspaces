@@ -19,8 +19,10 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockingDetails;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -94,13 +96,6 @@ public class StudentServiceImpl_PartialMockingTests {
                 thirdStudentDto, fourthStudentDto));
     }
 
-
-//    @Test
-//    void returnNamesOfAllStudentsInARoom() throws Exception {
-//        List<String> namesOfStudentsIn_Hall3_Room1 = studentService.returnTheNamesOfAllStudentsInARoom("HALL3 Room 1");
-//        assertThat(namesOfStudentsIn_Hall3_Room1, hasItems("Emmanuel Okammy", "Titobi Ligali"));
-//    }
-//
     @Test
     void registerStudentTest() throws Exception {
         RegistrationRequest registrationRequest = new RegistrationRequest("John", "Fallow",

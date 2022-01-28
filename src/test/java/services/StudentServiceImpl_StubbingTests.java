@@ -6,9 +6,11 @@ import data.repositories.StudentRepository;
 import dto.RegistrationRequest;
 import dto.StudentDto;
 import exceptions.DuplicateIdException;
+import exceptions.HostelManagementException;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +25,7 @@ import static org.hamcrest.Matchers.*;
 
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceImpl_StubbingTests {
@@ -50,12 +52,12 @@ class StudentServiceImpl_StubbingTests {
                 "MAT100419",
                 Gender.MALE);
         Student studentToSave = Student.builder()
-                                .firstName("John")
-                                .lastName("Doe")
-                                .matricNo("MAT100419")
-                                .password("securedPassword")
-                                .registrationTime(LocalDateTime.now())
-                                .gender(Gender.MALE).build();
+                .firstName("John")
+                .lastName("Doe")
+                .matricNo("MAT100419")
+                .password("securedPassword")
+                .registrationTime(LocalDateTime.now())
+                .gender(Gender.MALE).build();
         when(studentRepository.save(any(Student.class))).thenReturn(studentToSave);
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
         assertThat(studentDto, hasProperty("firstName", equalTo("John")));
@@ -73,7 +75,7 @@ class StudentServiceImpl_StubbingTests {
                 "MAT100419",
                 Gender.MALE);
 
-        when(studentRepository.save(any(Student.class))).thenAnswer(answer->{
+        when(studentRepository.save(any(Student.class))).thenAnswer(answer -> {
             return Student.builder()
                     .firstName("John")
                     .lastName("Doe")
@@ -82,6 +84,22 @@ class StudentServiceImpl_StubbingTests {
                     .registrationTime(getTime())
                     .gender(Gender.MALE).build();
         });
+        Student student = Student.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .matricNo("MAT100419")
+                .password("securedPassword")
+                .registrationTime(getTime())
+                .gender(Gender.MALE).build();
+
+        doAnswer(answer -> {
+            Student arg = answer.getArgument(0);
+            assertThat(arg, equalTo(student));
+            return null;
+        }).when(studentRepository).save(student);
+
+        studentRepository.save(student);
+
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
         assertThat(studentDto, hasProperty("firstName", equalTo("John")));
         assertThat(studentDto, hasProperty("lastName", equalTo("Doe")));
@@ -110,7 +128,7 @@ class StudentServiceImpl_StubbingTests {
                 .password("securedPassword")
                 .gender(Gender.MALE).build();
         when(studentRepository.findById(anyString())).thenReturn(Optional.of(student));
-        assertThatThrownBy(()->studentService.registerStudent(registrationRequest))
+        assertThatThrownBy(() -> studentService.registerStudent(registrationRequest))
                 .isInstanceOf(DuplicateIdException.class)
                 .hasMessage("student record with matric number already exists");
     }
@@ -138,5 +156,11 @@ class StudentServiceImpl_StubbingTests {
         studentService.assignBedSpace(studentDto);
         assertThat(student.getBedSpaceId(), not(equalTo(null)));
         assertThat(student.getBedSpaceId(), equalTo("HALL3 Room 1 Bedspace 1"));
+    }
+
+    @Test
+    void testThatThrowsHostelManagementExceptionWhenANullOrEmptyStringIsPassedAsArgument() throws Exception {
+        when(studentRepository.findById(null)).thenThrow(new HostelManagementException("User id cannot be null"));
+        assertThrows(HostelManagementException.class, () -> studentRepository.findById(null));
     }
 }
