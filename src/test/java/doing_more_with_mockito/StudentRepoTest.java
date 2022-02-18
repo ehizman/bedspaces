@@ -1,7 +1,8 @@
-package data.repositories;
+package doing_more_with_mockito;
 
 import data.models.Gender;
 import data.models.Student;
+import doing_more_with_mockito.StudentRepo;
 import exceptions.HostelManagementException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +11,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +18,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentCaptor.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -1,4 +1,4 @@
-package data.repositories;
+package doing_more_with_mockito;
 
 import data.models.Student;
 import exceptions.HostelManagementException;
