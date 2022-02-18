@@ -31,6 +31,7 @@ public class StudentRepository{
                 .collect(Collectors.toList());
     }
 
+
     public Student save(Student student) throws HostelManagementException {
         if (student == null){
             throw new NullEntityException("student object cannot be null");

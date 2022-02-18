@@ -10,10 +10,12 @@ import exceptions.HostelManagementException;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -108,6 +110,25 @@ class StudentServiceImpl_StubbingTests {
         assertThat(studentDto, hasProperty("gender", equalTo(Gender.MALE)));
     }
 
+    @Test
+    void findStudentByIdTest() throws Exception {
+        Student student = Student.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .matricNo("MAT100419")
+                .password("securedPassword")
+                .gender(Gender.MALE).build();
+        when(studentRepository.findById(anyString())).thenReturn(Optional.of(student));
+        Student returnValue = studentRepository.findById("string").orElse(null);
+        assertNotNull(returnValue);
+        assertThat(returnValue, hasProperty("firstName", equalTo("John")));
+        assertThat(returnValue, hasProperty("lastName", equalTo("Doe")));
+        assertThat(returnValue, hasProperty("matricNo", equalTo("MAT100419")));
+        assertThat(returnValue, hasProperty("password", equalTo("securedPassword")));
+        assertThat(returnValue, hasProperty("gender", equalTo(Gender.MALE)));
+    }
+
+
     private LocalDateTime getTime() {
         time = LocalDateTime.now();
         return time;
@@ -149,7 +170,7 @@ class StudentServiceImpl_StubbingTests {
                 .gender(Gender.MALE).build();
 
         when(studentRepository.findById(anyString())).thenReturn(Optional.empty());
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
+        when(studentRepository.save(ArgumentMatchers.isA(Student.class))).thenReturn(student);
         StudentDto studentDto = studentService.registerStudent(registrationRequest);
         when(studentRepository.findById(anyString())).thenReturn(Optional.of(student));
         when(hostelRepository.returnAvailableMaleSpace()).thenReturn(new BedSpace("HALL3 Room 1 Bedspace 1"));

@@ -6,6 +6,7 @@ import data.repositories.HostelRepository;
 import data.repositories.StudentRepository;
 import dto.RegistrationRequest;
 import dto.StudentDto;
+import exceptions.HostelManagementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-
 public class StudentServiceImpl_VerifyTests {
     private StudentService studentService;
     @Spy
