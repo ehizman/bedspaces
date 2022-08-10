@@ -2,6 +2,7 @@ package data.repositories;
 
 import data.models.Student;
 import exceptions.HostelManagementException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class StudentRepositoryImplTest {
             assertThat(student.getFirstName(), equalTo("Ehis"));
         }
         catch (HostelManagementException exception){
-            exception.printStackTrace();
+            Assertions.fail(exception);
         }
     }
 
@@ -57,7 +58,7 @@ class StudentRepositoryImplTest {
     @Test
     void delete() throws Exception {
         studentStudentRepository.delete(studentTwo);
-        assertThat(studentStudentRepository.findById("PSC1004300"), is(Optional.empty()));
+        assertThat(studentStudentRepository.findById("PSC1004300").isEmpty(), is(true));
     }
 
     @Test
@@ -69,6 +70,6 @@ class StudentRepositoryImplTest {
     @Test
     void testCanDeleteById() throws Exception {
         studentStudentRepository.delete("PSC1004300");
-        assertThat(studentStudentRepository.findById("PSC1004300"), is(Optional.empty()));
+        assertThat(studentStudentRepository.findById("PSC1004300").isEmpty(), is(true));
     }
 }
