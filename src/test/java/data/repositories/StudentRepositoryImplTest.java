@@ -2,6 +2,7 @@ package data.repositories;
 
 import data.models.Student;
 import exceptions.HostelManagementException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class StudentRepositoryImplTest {
             assertThat(student.getFirstName(), equalTo("Ehis"));
         }
         catch (HostelManagementException exception){
-            exception.printStackTrace();
+            Assertions.fail(exception);
         }
     }
 
